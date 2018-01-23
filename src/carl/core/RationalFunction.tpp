@@ -7,6 +7,9 @@
  */
 
 #include "RationalFunction.h"
+#include "GcdLog.h"
+
+#define CARL_RATIONAL_FUNCTION_HAVE_GCD_LOG 1
 
 #pragma once
 
@@ -50,6 +53,9 @@ void RationalFunction<Pol, AS>::eliminateCommonFactor(bool _justNormalize) {
 	mPolynomialQuotient->second *= cpFactorDen;
 	CoeffType cpFactor(std::move(cpFactorDen / cpFactorNom));
 	if (!_justNormalize && !denominatorAsPolynomial().isConstant()) {
+		GcdLog::log_before((void*)this);
+		std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+
 		carl::gcd(nominatorAsPolynomial(), denominatorAsPolynomial());
 		auto ret = carl::lazyDiv(nominatorAsPolynomial(), denominatorAsPolynomial());
 		mPolynomialQuotient->first = std::move(ret.first);
@@ -60,6 +66,9 @@ void RationalFunction<Pol, AS>::eliminateCommonFactor(bool _justNormalize) {
 		mPolynomialQuotient->second *= cpFactorDen;
 		cpFactor *= cpFactorDen / cpFactorNom;
 		mIsSimplified = true;
+
+		std::chrono::nanoseconds gcd_duration = std::chrono::high_resolution_clock::now() - start;
+		GcdLog::log_after((void*)this, gcd_duration);
 	}
 	mPolynomialQuotient->first *= carl::getNum(cpFactor);
 	mPolynomialQuotient->second *= carl::getDenom(cpFactor);
