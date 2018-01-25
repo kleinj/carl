@@ -56,7 +56,7 @@ void RationalFunction<Pol, AS>::eliminateCommonFactor(bool _justNormalize) {
 		GcdLog::log_before((void*)this);
 		std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
-		carl::gcd(nominatorAsPolynomial(), denominatorAsPolynomial());
+//		carl::gcd(nominatorAsPolynomial(), denominatorAsPolynomial());
 		auto ret = carl::lazyDiv(nominatorAsPolynomial(), denominatorAsPolynomial());
 		mPolynomialQuotient->first = std::move(ret.first);
 		mPolynomialQuotient->second = std::move(ret.second);
