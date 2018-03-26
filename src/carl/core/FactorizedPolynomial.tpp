@@ -719,7 +719,8 @@ namespace carl
             return std::move( result );
         }
     }
-	
+
+#if 0	
     template<typename P>
     void FactorizedPolynomial<P>::substituteIn( Variable _var, const FactorizedPolynomial<P>& _value )
     {
@@ -727,6 +728,7 @@ namespace carl
         res.substitute( _var, _value );
         return res;
     }
+#endif
     
     template<typename P>
     bool FactorizedPolynomial<P>::sqrt( FactorizedPolynomial<P>& _result ) const
